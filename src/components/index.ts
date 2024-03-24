@@ -1,7 +1,7 @@
 // 对外暴露插件语法
 import SvgIcon from '@/components/SvgIcon/index.vue'
 import {App} from 'vue'
-
+// 全局对象
 const allGloablComponent:Record<string,any>={SvgIcon}
 export default {
     // 务必叫做install方法

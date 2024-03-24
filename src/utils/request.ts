@@ -7,7 +7,6 @@ const request = axios.create({
 });
 // 第二步，request实例添加亲求响应拦截器
 request.interceptors.request.use((config: any) => {
-    console.log(config)
     return config
 })
 // 第三步，添加响应拦截器

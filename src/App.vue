@@ -1,26 +1,15 @@
 <template>
-  <div>
-    <h1>测试axios的二次封装</h1>
-  </div>
+    <router-view></router-view>
 </template>
 
-<script  setup lang="ts" >
-  import request from '@/utils/request.ts'
-  import {onMounted} from 'vue'
-  onMounted(()=>{
-    request({
-      url:'/user/login',
-      method:"post",
-      data:{
-        username:'admin',
-        password:'111111'
-      }
-    }).then(res=>{
-      console.log(res)
-    })
-  })
+<script setup>
+
 </script>
 
-<style lang="" scoped>
+<style lang="css" scoped>
 
 </style>
+
+
+
+
