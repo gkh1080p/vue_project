@@ -6,7 +6,8 @@ export interface loginForm{
 
 // 登录接口放回的类型
 interface dataType{
-    token:string
+    token?:string,
+    message?:string,
 }
 
 export interface loginResponseDate{
