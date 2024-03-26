@@ -7,13 +7,15 @@ import type { loginForm ,loginResponseDate } from '@/api/user/type';
 import type { UserState } from './types/types';
 // 引入读写cookie的函数
 import { getCookie, setCookie, deletecookie } from '../../utils/cookie';
-
+// 引入路由（常量路由）
+import {routesAll} from '@/router/routes'
 // 创建小仓库
 let useUserStore = defineStore('User', {
     //存储数据的地方
     state: ():UserState => {
         return {
             userCookie:" ",
+            menuRoutes:routesAll,//仓库存储生成菜单需要数组（路由）
         }
     },
     // 异步逻辑的地方
