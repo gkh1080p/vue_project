@@ -5,10 +5,12 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 import { viteMockServe } from 'vite-plugin-mock'
 
-
+//setup语法糖中写name
+import vueSetupExtend from 'vite-plugin-vue-setup-extend'
 export default (({command}:ConfigEnv):UserConfigExport=>{
   return{
     plugins: [vue(),
+      vueSetupExtend(),
       createSvgIconsPlugin({
         // 指定要缓存的图标文件夹
         iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],

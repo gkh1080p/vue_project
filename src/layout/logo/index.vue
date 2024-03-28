@@ -1,14 +1,15 @@
 <template>
   <div class="logo" v-if="setting.logoHidden">
     <img :src="setting.logo" alt="" >
-    <p>{{setting.title}}</p>
+    <p v-if="!LayOutSettingStore.fold">{{setting.title}}</p>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="Logo">
 // 引入设置标题与logo配置文件
 import setting from '@/setting.ts'
-
+import useLayOutSettingStore from '@/store/modules/setting';
+let LayOutSettingStore=useLayOutSettingStore()
 </script>
 
 <style lang="scss" scoped>

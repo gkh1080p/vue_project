@@ -26,4 +26,6 @@ app.use(ElementPlus, {
 app.use(router);
 // 加载仓库pinia
 app.use(pinia)
+// 引入路由鉴权
+import './permisstion';
 app.mount('#app')

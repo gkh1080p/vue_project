@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { UserFilled, Lock } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter,useRoute } from 'vue-router';
 import { ElNotification } from 'element-plus';
 import { getTime } from '@/utils/time.ts'
 // 获取路由器
@@ -43,7 +43,8 @@ let loginForm = reactive({
 let loading = ref(false)
 // 获取el-form组件
 let loginForms=ref()
-
+// 获取路由对象
+let $route=useRoute()
 
 // 发送亲求
 const login = async () => {
@@ -57,7 +58,9 @@ const login = async () => {
     await useStore.userLogin(loginForm)
     loading.value = false;
     // 编程式导航
-    $router.push('/')
+    // 判断路由路径中是否有query参数，如果有就往query参数跳，没有就不跳
+    let redirect:any=$route.query.redirect;
+    $router.push({path:redirect||'/'})
     ElNotification({
       type: 'success',
       message: `用户${loginForm.username},${getTime()}好`
