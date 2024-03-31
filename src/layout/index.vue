@@ -87,7 +87,7 @@ let $route = useRoute()
         position: absolute;
         width: calc(100% - $base_menu_width);
         height: calc(100vh - $base_tabbar_height);
-        background-color: yellow;
+        // background-color: yellow;
         left: $base_menu_width ;
         top: $base_tabbar_height;
         padding: 20px;

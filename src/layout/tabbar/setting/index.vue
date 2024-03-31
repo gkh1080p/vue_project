@@ -46,11 +46,11 @@ const fullScreen=()=>{
 // 获取路由对象
 let $route=useRoute()
 // 退出登录点击的回调
-const logout=()=>{
+const logout=async ()=>{
     // 第一件事：向服务器发送亲求
     // 第二件事：仓库当中关于相关的数据清空
     // 第三件：跳转到登录页面
-    userStore.userLogout()
+    await userStore.userLogout()
     $router.push({path:'/login',query:{redirect:$route.path}})
 }
 </script>

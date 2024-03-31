@@ -3,8 +3,8 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus';
 import useUserStore from '@/store/modules/user';
 const request = axios.create({
-    baseURL: import.meta.env.VITE_APP_BASE_API,//基础路径的带/api
-    timeout: 500
+    baseURL: "http://sph-api.atguigu.cn",//基础路径的带/api
+    timeout: 3000
 });
 // 第二步，request实例添加亲求响应拦截器
 request.interceptors.request.use((config: any) => {

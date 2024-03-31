@@ -50,7 +50,6 @@ let $route=useRoute()
 const login = async () => {
   // 确认表单全部正确
   await loginForms.value.validate();
-
   // 加载效果
   loading.value = true
   try {
@@ -78,7 +77,6 @@ const validatorUserName=(rule:any,value:any,callback:any)=>{
     // rule校验规则对象
     // value表单元素文本内容
     // 如果符合条件则调用callback,不符合则调用callback时注入错误信息
-    console.log(value.length)
     if(value.length>=5){
       callback();
     }else{
