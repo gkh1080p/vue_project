@@ -1,15 +1,17 @@
 <template>
-    <div>sku</div>
+    <div>
+      <!-- 三级分类的结构 -->
+      <Category></Category>
+    </div>
   </template>
   
   <script setup lang="ts">
   
   </script>
   
+
+
+
+
   <style lang="scss" scoped>
-   div{
-    background-color: red;
-    width: 300px;
-    height: 300px
-  }
   </style>

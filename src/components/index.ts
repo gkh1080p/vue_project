@@ -1,11 +1,12 @@
 // 对外暴露插件语法
 import SvgIcon from '@/components/SvgIcon/index.vue'
+import Category from './Category/index.vue'
 import {App} from 'vue'
 // 引入element-plus提供的图标组件
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // 全局对象
-const allGloablComponent:Record<string,any>={SvgIcon}
+const allGloablComponent:Record<string,any>={SvgIcon,Category}
 export default {
     // 务必叫做install方法
     install(app:App):void{

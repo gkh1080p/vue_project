@@ -26,8 +26,12 @@
         </el-table-column>
         <el-table-column label="品牌操作">
           <template #="{ row }">
-            <el-button type="primary" icon="Edit" @click="updateTrademark"></el-button>
-            <el-button type="danger" icon="Delete"></el-button>
+            <el-button type="primary" icon="Edit" @click="updateTrademark(row)"></el-button>
+            <el-popconfirm title="你确定要删除吗?" icon="Delete" @confirm="removeTradeMark(row.id)">
+              <template #reference>
+                <el-button type="danger">Delete</el-button>
+              </template>
+            </el-popconfirm>
 
           </template>
         </el-table-column>
@@ -49,19 +53,17 @@
     v-model:属性用户控制对话框的显示与隐藏的true显示，false隐藏
     title:设置对话框左上角标题
    -->
-    <el-dialog v-model="dialogFormVisible" title="添加品牌">
-      <el-form style="width: 70%; margin: 10px 80px;">
-        <el-form-item label="品牌名称" label-width="80px">
+    <el-dialog v-model="dialogFormVisible" :title="title">
+      <el-form style="width: 70%; margin: 10px 80px;" :model="trademarkParams" :rules="rules" ref="formRef">
+        <el-form-item label="品牌名称" label-width="100px" prop="tmName">
           <el-input placeholder="请输入品牌名称" v-model="trademarkParams.tmName"></el-input>
         </el-form-item>
-        <el-form-item label="品牌LOGO" label-width="80px">
-          <!-- upload属性API
-          action  --上传文件的地址
-        -->
+        <el-form-item label="品牌LOGO" label-width="100px" prop="logoUrl">
+
           <el-upload class="avatar-uploader" action="http://sph-api.atguigu.cn/admin/product/fileUpload"
-            :show-file-list="true" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+            :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
             <img v-if="trademarkParams.logoUrl" :src="trademarkParams.logoUrl" class="avatar" width="200px" />
-            <el-icon v-else class="avatar-uploader-icon" style="width: 200px;height: 200px; border: 2px solid;">
+            <el-icon v-else class="avatar-uploader-icon" style="width: 200px;height: 200px; border: 2px dashed;">
               <Upload />
             </el-icon>
           </el-upload>
@@ -78,14 +80,15 @@
 
 <script setup lang="ts">
 
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted, reactive, nextTick } from 'vue';
 // 请求封装引进
-import { reqHasTrademark, reqAddorUpdateTrademark } from '@/api/product/trademark/index.ts'
+import { reqHasTrademark, reqAddorUpdateTrademark,reqDeleteTrademark } from '@/api/product/trademark/index.ts'
 import type { Records, TradeMarkResponseData, TradeMark } from '@/api/product/trademark/type.ts'
 import type { UploadProps } from 'element-plus'
 import { ElMessage } from 'element-plus'
-import { SuccessFilled } from '@element-plus/icons-vue';
 
+// 弹框展示文字
+let title = ref<string>("")
 // 当前页面
 let pageNo = ref<number>(1)
 // 每一页展示的数据
@@ -96,6 +99,8 @@ let total = ref<number>(0)
 let trademarkArr = ref<Records>([])
 // 控制对话框的显示与隐藏
 let dialogFormVisible = ref(false)
+// 获取表单检验的ref
+let formRef = ref()
 // 获取已有品牌的接口封装成一个函数
 const getHasTrademark = async (pager = 1) => {
   ``
@@ -120,36 +125,54 @@ let trademarkParams = reactive<TradeMark>({
 // 新增商品
 function addTrademark() {
   trademarkParams.tmName = ""
-    trademarkParams.logoUrl = ""
+  trademarkParams.logoUrl = ""
+  title.value = "添加品牌"
   dialogFormVisible.value = true
+  // 方式1
+  // formRef.value?.clearValidate("tmName")
+  // formRef.value?.clearValidate("logoUrl")
+  // 方式2
+  nextTick(() => {
+    formRef.value.clearValidate("tmName")
+    formRef.value.clearValidate("logoUrl")
+  })
 }
 // 修改商品
-function updateTrademark() {
+function updateTrademark(row: TradeMark) {
+  // trademarkParams.tmName=row.tmName
+  // trademarkParams.logoUrl=row.logoUrl
+  // trademarkParams.id=row.id
+  Object.assign(trademarkParams, row)
+  title.value = "修改品牌"
   dialogFormVisible.value = true
+  nextTick(() => {
+    formRef.value.clearValidate("tmName")
+    formRef.value.clearValidate("logoUrl")
+  })
 }
 // 对话框底部取消按钮
 function cancel() {
   dialogFormVisible.value = false
-
 }
 // 对话框底部确认按钮
 const confirm = async () => {
+  await formRef.value.validate()
   let result: any = await reqAddorUpdateTrademark(trademarkParams);
+
   if (result.code == 200) {
     dialogFormVisible.value = false
     ElMessage({
       type: "success",
-      message: "添加品牌成功"
+      message: trademarkParams.id ? "修改品牌成功" : "添加品牌成功"
     })
-    getHasTrademark()
-  
+    getHasTrademark((total.value / limit.value))
+
   } else {
     ElMessage({
       type: "error",
-      message: "添加失败"
+      message: trademarkParams.id ? "修改品牌失败" : "添加品牌失败"
     })
   }
-  console.log(result)
 }
 
 // 上传图片之前触发的钩子
@@ -176,6 +199,56 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
 const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
   // response即为当前这次上传图片post请求服务器返回的数据
   trademarkParams.logoUrl = response.data;
+  // 图片上传成功后清理掉对应的验证消息
+  formRef.value.clearValidate("logoUrl");
+}
+
+
+// 表单校验
+// 表单校验中自定义函数
+const validatorTmName = (rule: any, value: any, callBack: any) => {
+  if (value.trim().length >= 2) {
+    callBack()
+  } else {
+    // 校验未通过返回错误信息
+    callBack(new Error("品牌名称位数需要大于两位"))
+  }
+}
+const validatorLogoUrl = (rule: any, value: any, callBack: any) => {
+  if (value) {
+    callBack()
+  } else {
+    callBack(new Error("LOGO图片务必上传"))
+  }
+}
+// 校验规则
+const rules = ({
+  tmName: [
+    { required: true, trigger: 'blur', validator: validatorTmName }
+  ],
+  logoUrl: [
+    { require: true, trigger: "change", validator: validatorLogoUrl }
+  ]
+})
+
+// 气泡确认框确认回调---删除按钮
+const removeTradeMark=async (id:number)=>{
+  // 点击取人按钮
+  let result=await reqDeleteTrademark(id)
+  console.log(result)
+  if(result.code==200){
+    ElMessage({
+      type:"success",
+      message:"删除品牌成功"
+    })
+    // 再次获取已有品牌
+    getHasTrademark(trademarkArr.value.length>1?pageNo.value:pageNo.value-1)
+  }else{
+      ElMessage({
+        type:'error',
+        message:'删除商品失败'
+      })
+    }
 }
 </script>
 

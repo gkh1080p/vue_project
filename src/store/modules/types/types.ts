@@ -9,3 +9,16 @@ export interface UserState{
 }
 
 
+// 定义category中分类的对象返回值类型
+import type { CategoryObj } from "@/api/product/attr/type"
+export interface CategoryState{
+    c1Arr:CategoryObj[],
+    c2Arr:CategoryObj[],
+    c3Arr:CategoryObj[],
+    c1Id:number|string,
+    c2Id:number|string,
+    c3Id:number|string,
+    scene:number
+}
+
+
