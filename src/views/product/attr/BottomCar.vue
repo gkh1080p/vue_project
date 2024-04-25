@@ -1,7 +1,7 @@
 <template>
   <el-card style="margin:10px 0">
     <div v-show="categoryStore.scene===0">
-      <el-button @click="addAttr" type="primary" size="default" icon="Plus" :disabled="categoryStore.c3Id?false:true">添加属性</el-button>
+      <el-button @click="addAttr" type="primary" size="default" icon="Plus" :disabled="categoryStore.c3Id?false:true"  v-has="`btn.Attr.add`">添加属性</el-button>
       <el-table border style="margin: 15px 0;" :data="attrArr">
       <el-table-column label="序号" width="80px" type="index" align="center" ></el-table-column>
       <el-table-column label="属性名称" width="150px" prop="attrName"></el-table-column>
@@ -14,8 +14,8 @@
         <!-- row表示已有属性对象 -->
         <template #="{row}">
           <!-- 修改已有属性与属性值 -->
-          <el-button type="primary" icon="Edit" @click="updateAttr(row)"></el-button>
-          <el-popconfirm title="你确定要删除吗？" @confirm="deleteAttr(row.id)" >
+          <el-button type="primary" icon="Edit" @click="updateAttr(row)" v-has="`btn.Attr.update`"></el-button>
+          <el-popconfirm title="你确定要删除吗？" @confirm="deleteAttr(row.id)" v-has="`btn.Attr.remove`">
             <template #reference>
               <el-button type="danger" icon="Delete"></el-button>
             </template>

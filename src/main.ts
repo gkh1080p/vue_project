@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { createApp } from 'vue'
 import App from '@/App.vue'
 import 'virtual:svg-icons-register'
@@ -28,4 +29,9 @@ app.use(router);
 app.use(pinia)
 // 引入路由鉴权
 import './permisstion';
+// 引入暗黑模式
+import 'element-plus/theme-chalk/dark/css-vars.css'
+// 引入自定义指令
+import { isHasButton } from './directive/has.ts'
+isHasButton(app)
 app.mount('#app')

@@ -3,7 +3,6 @@
 import request from "@/utils/request";
 // 引入类型
 import type { TradeMark, TradeMarkResponseData } from "./type";
-import { ElStep } from "element-plus";
 // 品牌管理模块接口
 enum API{
     // 获取已有品牌接口

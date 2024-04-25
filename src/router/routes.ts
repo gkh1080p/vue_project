@@ -1,6 +1,6 @@
 // 对外暴露的路由
 
-import component from 'element-plus/es/components/tree-select/src/tree-select-option.mjs';
+
 
 // 常量路由
 export const routesAll = [
@@ -47,15 +47,7 @@ export const routesAll = [
             hidden: true,//代表路由的标题在菜单中是否隐藏，true表示隐藏
         },
     },
-    {
-        path: '/:pathMatch(.*)*',
-        redirect: '/login',
-        name: 'Any',
-        meta: {
-            title: '任意路由',//路由信息
-            hidden: true,//代表路由的标题在菜单中是否隐藏，true表示隐藏
-        },
-    },
+    
     {
         path:'/screen',
         component:()=>import("@/views/screen/index.vue"),
@@ -66,6 +58,12 @@ export const routesAll = [
             icon:'Platform'
         }
     },
+    
+]
+
+
+// 异步路由
+export const asyncRoute=[
     {
         path:"/acl",
         component:()=>import('@/layout/index.vue'),
@@ -162,5 +160,17 @@ export const routesAll = [
             },
         ]
     }
+]
 
+// 任意路由
+export const anyRoute=[
+    {
+        path: '/:pathMatch(.*)*',
+        redirect: '/404',
+        name: 'Any',
+        meta: {
+            title: '任意路由',//路由信息
+            hidden: true,//代表路由的标题在菜单中是否隐藏，true表示隐藏
+        },
+    },
 ]

@@ -10,7 +10,22 @@ import type { UserState } from './types/types';
 // 方法2引入token方法
 import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from '@/utils/token.ts'
 // 引入路由（常量路由）
-import { routesAll } from '@/router/routes'
+import { routesAll,asyncRoute,anyRoute } from '@/router/routes'
+// 引入路由器
+import router from '@/router';
+// 引入深拷贝方法
+import cloneDeep from 'lodash/cloneDeep'
+// 动态路由过滤函数
+let filterAsyncRoute=(asyncRoute:any,routes:any)=>{
+    return asyncRoute.filter((item:any)=>{
+        if(routes.includes(item.name)){
+            if(item.children&&item.children.length>0){
+               item.children= filterAsyncRoute(item.children,routes)
+            }
+            return true
+        }
+    })
+}
 // 创建小仓库 --token写法
 let useUserStore = defineStore('User', {
     //存储数据的地方
@@ -20,6 +35,7 @@ let useUserStore = defineStore('User', {
             menuRoutes: routesAll,//仓库存储生成菜单需要数组（路由）
             username: '',
             avatar: '',
+            button:[],
         }
     },
     // 异步逻辑的地方
@@ -27,7 +43,7 @@ let useUserStore = defineStore('User', {
         // 登录亲求
         async userLogin(data: loginFormData) {
             const result: loginResponseData = await reqLogin(data)
-            console.log(result)
+            
             // 登录请求成功200，失败201
             if (result.code === 200) {
                 // 进行本地存储,进行持久化
@@ -43,9 +59,18 @@ let useUserStore = defineStore('User', {
         async userInfo() {
             // 获取用户信息进行仓库当中用户头像，名字
             let result:userInfoResponseData = await reqUserInfo()
+
             if (result.code == 200) {
                 this.username = result.data.name
                 this.avatar = result.data.avatar
+                this.button=result.data.buttons
+                // 计算当前用户需要的异步路由,进行深拷贝
+                let userAsyncRoute=filterAsyncRoute(cloneDeep(asyncRoute),result.data.routes)
+                // 菜单数据
+                this.menuRoutes=[...routesAll,...userAsyncRoute,...anyRoute];
+                [...userAsyncRoute,...anyRoute].forEach((item:any) => {
+                    router.addRoute(item)
+                });
                 this.token = GET_TOKEN()
                 return 'ok'
             } else {

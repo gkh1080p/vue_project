@@ -2,13 +2,13 @@
   <div>
     <el-card>
       <!-- 卡片的添加按钮 -->
-      <el-button type="primary" size="default" icon='Plus' @click="addTrademark">添加品牌</el-button>
+      <el-button type="primary" size="default" icon='Plus' @click="addTrademark" v-has="`btn.Trademark.add`">添加品牌</el-button>
       <!-- 
       table
         --border:设置表格纵向是否有表格
       table-column
         -label:某一个列表名字
-        -width:宽度
+        -width:宽度 
         —align:设置1列的文字对齐方式
      -->
       <el-table style="width: 100%;margin: 10px 0;" border :data="trademarkArr">
@@ -26,8 +26,8 @@
         </el-table-column>
         <el-table-column label="品牌操作">
           <template #="{ row }">
-            <el-button type="primary" icon="Edit" @click="updateTrademark(row)"></el-button>
-            <el-popconfirm title="你确定要删除吗?" icon="Delete" @confirm="removeTradeMark(row.id)">
+            <el-button type="primary" icon="Edit" @click="updateTrademark(row)"  v-has="`btn.Trademark.update`"></el-button>
+            <el-popconfirm title="你确定要删除吗?" icon="Delete" @confirm="removeTradeMark(row.id)" v-has="`btn.Trademark.remove`">
               <template #reference>
                 <el-button type="danger">Delete</el-button>
               </template>
@@ -45,7 +45,7 @@
       <el-pagination v-model:current-page="pageNo" v-model:page-size="limit" :page-sizes="[3, 5, 7, 9]"
         :disabled="false" :background="true" layout=" prev, pager, next, jumper,->,total, sizes," :total="total"
         @current-change="getHasTrademark" @size-change="getHasTrademark(1)" />
-      <template #footer> content</template>
+      
     </el-card>
 
     <!-- 对话框组件，在添加品牌和修改品牌的时候使用结构 -->
@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-
+// @ts-nocheck
 import { ref, onMounted, reactive, nextTick } from 'vue';
 // 请求封装引进
 import { reqHasTrademark, reqAddorUpdateTrademark,reqDeleteTrademark } from '@/api/product/trademark/index.ts'

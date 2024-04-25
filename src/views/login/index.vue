@@ -24,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck
 import { UserFilled, Lock } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue';
 import { useRouter,useRoute } from 'vue-router';

@@ -44,7 +44,8 @@ export interface Attr {
     categoryLevel:number,
     createTime?:string,
     updateTime?:string,
-    attrValueList:AttrValueList
+    attrValueList:AttrValueList,
+    attrIdAndValueId?:string,
 }
 // 存储每一个属性对象的数组ts类型
 export type AttrList=Attr[];

@@ -36,10 +36,11 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+
 // 获取父亲穿过来的全部路由数组
 defineProps(['menuList'])
-// 获取一个路由对象
-import { useRouter } from 'vue-router';
+// // 获取一个路由对象
 let $router=useRouter();
 const goRoute=(vc:any)=>{
   $router.push(vc.index)

@@ -1,8 +1,10 @@
-// 路由鉴权，项目中的路由什么条件下可以访问，什么条件下不能访问
-import router from './router/index.ts';
+// @ts-nocheck
 // 进度条插件
 import nprogress from 'nprogress';
 import "nprogress/nprogress.css"
+// 路由鉴权，项目中的路由什么条件下可以访问，什么条件下不能访问
+import router from './router/index.ts';
+
 
 // 获取用户小仓库
 import useUserStore from './store/modules/user.ts';
@@ -41,12 +43,13 @@ let userStore=useUserStore(pinia)
             }else{
                 // 没有用户信息，发送亲求
                 try {
-                    userStore.userInfo()
-                    next()
+                    await userStore.userInfo()
+                    // 刷新的时候是异步路由，有可能还没加载完毕
+                    next({...to})
                 } catch (error) {
                     // token过期，获取不到用户信息
                    await userStore.userLogout();
-                    next({path:'/',query:{redirect:to.path}})
+                    next({path:'/login',query:{redirect:to.path}})
                 }
 
             }

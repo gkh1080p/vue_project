@@ -2,7 +2,7 @@
 import request from '@/utils/request.ts'
 
 // 映入数据类型
-import type { CategoryResponseData ,AttrResponseDate,Attr} from './type'
+import type { CategoryResponseData ,AttrResponseData,Attr} from './type'
 
 enum API{
     C1_URL="/admin/product/getCategory1" ,
@@ -27,7 +27,7 @@ export const reqC3=(id:number)=>request.get<any,CategoryResponseData>(API.C3_URL
 
 // 获取对应的分类下已有的属性与属性接口
 export const reqAttr=(id_1:number|string,id_2:number|string,id_3:number|string)=>{
-    return request.get<any,AttrResponseDate>(API.ATTR_RUL+`${id_1}/${id_2}/${id_3}`);
+    return request.get<any,AttrResponseData>(API.ATTR_RUL+`${id_1}/${id_2}/${id_3}`);
 }
 
 // 新增或者修改已有属性的接口
